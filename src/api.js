@@ -1,7 +1,10 @@
 import axios from "axios";
 import { CapacitorHttp } from "@capacitor/core";
-import { Plugins } from "@capacitor/core";
-const { Http } = Plugins;
+ import { Plugins } from "@capacitor/core";
+ const { Http } = Plugins;
+
+// import { Http } from '@capacitor-community/http';
+
 
 // import { Http } from "@capacitor-community/http";
 
@@ -26,8 +29,8 @@ axios.defaults.headers.common = {
 // const apiUrlCallUrl = "http://localhost:3000";
 const apiUrlCallUrl = "https://ionic-server-proxy.vercel.app/";
 
-const baseUrl1 = "https://103.93.97.207:8443";
-const baseUrl2 = "https://malkapururbansoc.in:8443";
+const baseUrl1 = "https://mobile.vasantraochougulepatsanstha.com:8443";
+const baseUrl2 = "https://mobile.vasantraochougulepatsanstha.com:8443";
 
 const checkRequest = async (url, params, attempt = 1) => {
   const baseUrl = attempt === 1 ? baseUrl1 : baseUrl2;

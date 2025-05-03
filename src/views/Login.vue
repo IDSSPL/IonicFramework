@@ -53,12 +53,18 @@
               >Forgot Password?</ion-label
             >
           </div>
+          
+
         </ion-list>
       </div>
       <br />
       <div class="image-container">
         <img src="../../assets/icon.png" />
       </div>
+      <!-- <div class="device-id-container">
+        <ion-text> <strong>Device ID:</strong> {{ deviceId }} </ion-text>
+      </div> -->
+     
     </ion-content>
     <!-- <ion-footer>
       <ion-toolbar>
@@ -84,7 +90,7 @@
       <ion-toolbar>
         <ion-button
           v-if="!userConfirm"
-          @click="fetchConfirmation"
+          @click="login"
           expand="full"
           shape="round"
           >Login</ion-button
@@ -140,6 +146,14 @@
 <script>
 import api from "@/api";
 import validator from "validator";
+import { Device } from "@capacitor/device"; // Import the Device plugin
+import { AndroidPermissions } from "@ionic-native/android-permissions";
+import { v4 as uuidv4 } from "uuid";
+
+import { onMounted, ref } from 'vue';
+import { Preferences } from '@capacitor/preferences';
+import { Storage } from '@ionic/storage';
+import { alertController } from '@ionic/vue';
 
 export default {
   watch: {},
@@ -153,9 +167,36 @@ export default {
         email: true,
         passward: true,
       },
+      deviceId: "",
     };
   },
+  mounted() {
+    this.getDeviceId(); // Fetch the device ID when the component is mounted
+  },
+
   methods: {
+   
+  
+    async getDeviceId() {
+      const storage = new Storage();
+      await storage.create();
+
+      const stored = await storage.get('device_id');
+      if (stored) {
+        this.deviceId = stored;
+        // this.deviceId = stored.replaceAll('-','');
+        console.log('Existing Device ID:', this.deviceId);
+      } else {
+        const newId = uuidv4();
+        await storage.set('device_id', newId);
+        this.deviceId = newId;
+        console.log('Generated new Device ID:', this.deviceId);
+      }
+
+      //  alert('Device ID: ' + this.deviceId);
+    },
+ 
+
     validateForm() {
       this.validation.email = !validator.isEmpty(this.email);
       this.validation.passward = !validator.isEmpty(this.password);
@@ -179,37 +220,71 @@ export default {
     },
 
     async login() {
-      try {
-        const error = this.validateForm();
-        if (error) {
-          this.error(error);
-          return;
-        }
-        this.loadderOn();
-        const response = await api.login("/vcp.java/servlet/MobileLogin", {
-          email: this.email,
-          passward: this.password,
-        });
-        // alert(response);
-        // alert(JSON.stringify(response));
-        if (response?.data?.message == "Success") {
-          localStorage.setItem("token", this.email);
-          localStorage.setItem("userDetails", JSON.stringify(response.data));
-          this.setUserDetails({ email: this.email, data: response.data });
-          this.success("Logged in successfully");
-          this.$router.push("Home");
-        } else {
-          this.error("Wrong userid or password is entered.");
-        }
-      } catch (error) {
-        alert(JSON.stringify(error));
-        alert(error);
-        console.error(error);
-        this.error("Something went wrong while login. Contat to admin.");
-      }
-      this.loadderOff();
-      this.hideDialog();
-    },
+  try {
+    const error = this.validateForm();
+    if (error) {
+      this.error(error);
+      return;
+    }
+    this.loadderOn();
+    console.log(this.deviceId);
+
+    const response = await api.login("/webbank.java/servlet/MobileLogin", {
+      email: this.email,
+      passward: this.password,
+      deviceid: this.deviceId,
+    });
+    console.log("Full login response:", response);
+    console.log("Login message:", response?.data?.message);
+    console.log("Login status:" ,response?.data?.status);
+
+    if (response?.data?.message == "Success"&& response?.data?.status === "00") {
+      // this.fetchConfirmation();
+      localStorage.setItem("token", this.email);
+      localStorage.setItem("deviceId", this.deviceId);
+      localStorage.setItem("userDetails", JSON.stringify(response.data));
+      this.setUserDetails({ email: this.email, data: response.data });
+       this.success("Logged in successfully");
+       this.$router.push("Home");
+    }else if (response?.data?.message == "Success"&& response?.data?.status === "02") {
+      // this.fetchConfirmation();
+      localStorage.setItem("token", this.email);
+      localStorage.setItem("userDetails", JSON.stringify(response.data));
+      this.setUserDetails({ email: this.email, data: response.data });
+      //  this.success("Logged in successfully");
+       this.$router.push("UserConfirmation");
+    }else if (response?.data?.message?.toLowerCase().includes("fail") && response?.data?.status === "08") {
+       await this.showAlert("Device ID: \n" + this.deviceId, "This device is not registered. Please contact your bank.");
+      // this.error("Device ID: " + this.deviceId+"This device is not registered. Please contact your bank.");
+    }else if (response?.data?.message?.toLowerCase().includes("fail") && response?.data?.status === "07" ) {
+       await this.showAlert("Password Is Incorrect");
+    }else if (response?.data?.message?.toLowerCase().includes("fail") && response?.data?.status === "01" ) {
+       await this.showAlert("This User Is Not Registered");
+    }else {
+      // this.error("Wrong userid or password is entered.");
+      await this.showAlert("Wrong userid or password is entered..");
+    }
+  } catch (error) {
+    await this.showAlert('Error', JSON.stringify(error));
+    console.error(error);
+    this.error("Something went wrong while login. Contact admin.");
+  }
+  this.loadderOff();
+  this.hideDialog();
+},
+
+async showAlert(header, message) {
+  console.log('showAlert called with:', header, message);
+
+   const alert = await alertController.create({
+    header : header,
+    message: message,
+     buttons: ['OK'],
+     cssClass: 'custom-alert',
+  });
+  await alert.present();
+},
+
 
     async fetchConfirmation() {
       try {
@@ -220,20 +295,26 @@ export default {
         }
         this.loadderOn();
         const response = await api.login(
-          "/vcp.java/servlet/MobileUserConfirm",
+          "/webbank.java/servlet/MobileUserConfirm",
           {
             email: this.email,
           }
         );
         // console.log(JSON.stringify(response?.data));
-        // console.log("Response:", response.data);
+         console.log("Response:", response.data);
 
         if (response?.data?.message == "Success") {
           // this.$emit("userConfirm", { userConfirm: true });
-          this.login();
+          // this.login();
+          localStorage.setItem("token", this.email);
+      localStorage.setItem("userDetails", JSON.stringify(response.data));
+      this.setUserDetails({ email: this.email, data: response.data });
+      this.success("Logged in successfully");
+      this.$router.push("Home");
         } else {
           // this.$emit("userConfirm", { userConfirm: false });
-          this.showDialog = true;
+          // this.login();
+           this.showDialog = true;
         }
       } catch (error) {
         this.error("Something went wrong while fetching transaction details.");
@@ -252,7 +333,7 @@ export default {
         }
         this.loadderOn();
         const response = await api.login(
-          "/vcp.java/servlet/SendForgotPassward",
+          "/webbank.java/servlet/SendForgotPassward",
           {
             email: this.email,
           }
@@ -433,6 +514,21 @@ ion-footer ion-toolbar {
   color: #8c8c8c;
   margin: 0;
 }
+
+/* Custom CSS to prevent message wrapping */
+.custom-alert .alert-message {
+  white-space: nowrap;         /* Prevent line wrapping */
+  overflow-x: auto;            /* Allow scrolling if message is long */
+  font-size: 16px;             /* Adjust the font size as needed */
+  max-width: 100%;             /* Ensure alert doesn't overflow container */
+}
+
+.custom-alert .alert-title {
+  display: none;               /* Hide the default header (optional) */
+}
+
+
+
 
 #container a {
   text-decoration: none;

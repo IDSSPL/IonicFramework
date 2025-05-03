@@ -11,6 +11,7 @@ import AddBeneficiary from "@/views/AddBeneficiary.vue";
 import QRCollection from "@/views/QRCollection.vue";
 import FastTag from "@/views/FastTag.vue";
 import RemoveBeneficiary from "@/views/RemoveBeneficiary.vue";
+import UserConfirmation from "@/views/UserConfirmation.vue";
 
 const routes = [
   {
@@ -76,6 +77,10 @@ const routes = [
     name: "RemoveBeneficiary",
     path: "/RemoveBeneficiary",
     component: RemoveBeneficiary,
+  }, {
+    name: "UserConfirmation",
+    path: "/UserConfirmation",
+    component: UserConfirmation,
   },
   {
     name: "Logout",
