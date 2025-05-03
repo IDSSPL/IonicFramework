@@ -201,14 +201,17 @@ export default {
 
         this.loadderOn();
         const userId = this.loggedInUserId();
-        const response = await api.post("/vcp.java/servlet/AddBeneficiary", {
-          email: userId,
-          bene_account: this.ben_account,
-          bene_ifsc: this.ifsc_code,
-          bene_name: this.bene_name,
-          bene_bankname: this.bank_name,
-          type: "A",
-        });
+        const response = await api.post(
+          "/vcp.java/servlet/AddBeneficiary",
+          {
+            email: userId,
+            bene_account: this.ben_account,
+            bene_ifsc: this.ifsc_code,
+            bene_name: this.bene_name,
+            bene_bankname: this.bank_name,
+            type: "A",
+          }
+        );
 
         if (response?.data?.message == "Success") {
           this.success("Beneficiary added successfully.");
@@ -230,6 +233,15 @@ export default {
 </script>
 
 <style scoped>
+/* Card-like form appearance */
+ion-list {
+  background: var(--card-background);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
 ion-input {
   text-transform: uppercase;
 }

@@ -19,6 +19,7 @@ const myMixin = {
     if (this.loggedInUserData()) {
       this.setUserDetails({
         email: this.loggedInUserId(),
+        deviceId: this.loggedInDeviceId(),
         data: this.loggedInUserData(),
       });
     }
@@ -26,6 +27,9 @@ const myMixin = {
   methods: {
     setUserDetails({ email, data }) {
       this.userDetailsMixin = { email, data };
+    },
+    loggedInDeviceId() {
+      return localStorage.getItem("deviceId");
     },
     loggedInUserId() {
       return localStorage.getItem("token");

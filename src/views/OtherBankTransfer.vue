@@ -7,7 +7,7 @@
         <ion-buttons slot="start">
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Transfer to Other bank</ion-title>
+        <ion-title>Transfer To Other Bank</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -128,6 +128,7 @@
 import api from "@/api";
 import validator from "validator";
 import ConfirmationBeforeTransaction from "./ConfirmationBeforeTransaction.vue";
+import { alertController } from '@ionic/vue';
 
 export default {
   watch: {},
@@ -275,18 +276,21 @@ export default {
 
         this.loadderOn();
         const userId = this.loggedInUserId();
-        const response = await api.post("/vcp.java/servlet/MobileTrasnaction", {
-          email: userId,
-          same_bank: "N",
-          bene_account: this.ben_account,
-          amount: this.amount,
-          rtgs_neft: "R",
-          bene_ifsc: this.ifsc_code,
-          bene_bankname: this.bank_name,
-          bene_name: this.bene_name,
-          reason: this.reason,
-          utr_number: this.utr,
-        });
+        const response = await api.post(
+          "/vcp.java/servlet/MobileTrasnaction",
+          {
+            email: userId,
+            same_bank: "N",
+            bene_account: this.ben_account,
+            amount: this.amount,
+            rtgs_neft: "R",
+            bene_ifsc: this.ifsc_code,
+            bene_bankname: this.bank_name,
+            bene_name: this.bene_name,
+            reason: this.reason,
+            utr_number: this.utr,
+          }
+        );
 
         if (response?.data) {
           this.success("Transaction succeed.");
@@ -296,31 +300,44 @@ export default {
           response?.data?.message == "Failuer" &&
           response?.data?.status == "05"
         ) {
-          this.error("Transaction failed. Insuffucient Account Balance.");
+          await this.showAlert("Transaction failed. Insuffucient Account Balance.");
           this.loadderOff();
         } else {
-          this.error(
-            "Transaction failed. Please try again or contact to admin."
-          );
+          await this.showAlert( "Transaction failed. Please try again or contact to admin.");
           this.clearUserData();
           this.$router.push("login");
         }
       } catch (error) {
-        this.error("Transaction failed. Please try again or contact to admin.");
+        await this.showAlert("Transaction failed. Please try again or contact to admin.");
         this.clearUserData();
         this.$router.push("login");
       }
       this.loadderOff();
     },
 
+    async showAlert(header, message) {
+     console.log('showAlert called with:', header, message);
+
+     const alert = await alertController.create({
+     header : header,
+     message: message,
+     buttons: ['OK'],
+     cssClass: 'custom-alert',
+     });
+     await alert.present();
+    },
+
     async fetchBeneficiary() {
       try {
         this.loadderOn();
         const userId = this.loggedInUserId();
-        const response = await api.post("/vcp.java/servlet/ShowBeneficiary", {
-          email: userId,
-          type: "B",
-        });
+        const response = await api.post(
+          "/vcp.java/servlet/ShowBeneficiary",
+          {
+            email: userId,
+            type: "B",
+          }
+        );
 
         // console.log(JSON.stringify(response?.data));
         // console.log("Response:", response.data);
@@ -348,6 +365,14 @@ export default {
 </script>
 
 <style scoped>
+/* Card-like form appearance */
+ion-list {
+  background: var(--card-background);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  margin-bottom: 20px;
+}
 #container strong {
   font-size: 20px;
   line-height: 26px;

@@ -7,7 +7,7 @@
         <ion-buttons slot="start">
           <ion-menu-button color="primary"></ion-menu-button>
         </ion-buttons>
-        <ion-title>Transfer in same bank</ion-title>
+        <ion-title>Transfer In Same Bank</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -112,6 +112,7 @@
 import api from "@/api";
 import validator from "validator";
 import ConfirmationBeforeTransaction from "./ConfirmationBeforeTransaction.vue";
+import { alertController } from '@ionic/vue';
 
 export default {
   watch: {},
@@ -297,8 +298,10 @@ export default {
           utr_number: this.utr,
         });
 
+        console.log(response?.data?.message);
         if (response?.data?.message == "Success") {
-          this.success("Transaction succeed.");
+          // this.success("Transaction succeed.");
+          await this.showAlert("Transaction Succeed.");
           this.openConfirmationModal = false;
           this.loadderOff();
           this.$router.push("Home");
@@ -306,28 +309,49 @@ export default {
           response?.data?.message == "Failuer" &&
           response?.data?.status == "05"
         ) {
-          this.error("Transaction failed. Insuffucient Account Balance.");
+          // this.error("Transaction failed. Insuffucient Account Balance.");
+          await this.showAlert("Transaction Failed. Insuffucient Account Balance.");
           this.loadderOff();
         } else {
-          this.error(
-            "Transaction failed. Please try again or Check Account Code."
-          );
+          // this.error(
+          //   "Transaction failed. Please try again or Check Account Code."
+          // );
+          await this.showAlert("Transaction Failed. Please Try Again or Check Account Code.");
           // this.clearUserData();
           this.loadderOff();
           // this.$router.push("login");
         }
       } catch (error) {
-        this.error("Transaction failed. Please try again or contact to admin.");
+        await this.showAlert("Transaction failed. Please Try Again or Contact to Admin.");
         this.clearUserData();
         this.$router.push("login");
       }
       this.loadderOff();
+    },
+    async showAlert(header, message) {
+     console.log('showAlert called with:', header, message);
+
+     const alert = await alertController.create({
+     header : header,
+     message: message,
+     buttons: ['OK'],
+     cssClass: 'custom-alert',
+     });
+     await alert.present();
     },
   },
 };
 </script>
 
 <style scoped>
+ion-list {
+  background: var(--card-background);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
 #container strong {
   font-size: 20px;
   line-height: 26px;
