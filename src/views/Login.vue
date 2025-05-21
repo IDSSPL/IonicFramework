@@ -244,8 +244,34 @@ export default {
       localStorage.setItem("deviceId", this.deviceId);
       localStorage.setItem("userDetails", JSON.stringify(response.data));
       this.setUserDetails({ email: this.email, data: response.data });
+
+
+      try {
+        const userId = this.loggedInUserId();
+        const response = await api.login("/vcp.java/servlet/MobileOTP", {
+            email: userId,
+            type:"GenerateOTP",
+          });
+  
+          if (response.data.status === '00') {
+            // await this.showAlert("Success", "Generated OTP Now verify.");
+            this.$router.push("Otp");
+          } else {
+            await this.showAlert("Error", response.data.message || 'Failed To Generate OTP');
+          }
+        } catch (error) {
+          console.error(error);
+          await this.showAlert("Error", 'Something went wrong while Generating OTP');
+        }
+
+
+
+
+
+
+     
        this.success("Logged in successfully");
-       this.$router.push("Home");
+      //  this.$router.push("Home");
     }else if (response?.data?.message == "Success" && response?.data?.status === "02") {
       // this.fetchConfirmation();
       localStorage.setItem("token", this.email);
@@ -260,6 +286,8 @@ export default {
        await this.showAlert("Password Is Incorrect");
     }else if (response?.data?.message?.toLowerCase().includes("fail") && response?.data?.status === "01" ) {
        await this.showAlert("This User Is Not Registered");
+    }else if (response?.data?.message?.toLowerCase().includes("fail") && response?.data?.status === "03" ) {
+       await this.showAlert("User Is Deactivated.Please Contact Bank");
     }else {
       // this.error("Wrong userid or password is entered.");
       await this.showAlert("Wrong userid or password is entered..");
