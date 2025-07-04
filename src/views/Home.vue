@@ -30,7 +30,7 @@
                     "
                   >
                     <!-- Bhedasgaon Nagari Sahakari Pathsanstha Ltd. -->
-                     Malkapur Urban Co-Op Credit Society Ltd.
+                     Malkapur Urban Co-Op Credit Society Ltd
                   </p>
                 </ion-card-title>
               </ion-card-header>
