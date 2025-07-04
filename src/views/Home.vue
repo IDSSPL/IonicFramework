@@ -166,7 +166,7 @@
           </ion-row>
         </ion-grid>
 
-        <!-- Beneficiary Management -->
+        <!-- Beneficiary Management test -->
         <ion-item-divider class="section-divider">
           <ion-icon :icon="peopleCircleOutline" slot="start"></ion-icon>
           <ion-label>Beneficiary Management</ion-label>
