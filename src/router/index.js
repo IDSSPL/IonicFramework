@@ -12,6 +12,10 @@ import QRCollection from "@/views/QRCollection.vue";
 import FastTag from "@/views/FastTag.vue";
 import RemoveBeneficiary from "@/views/RemoveBeneficiary.vue";
 import UserConfirmation from "@/views/UserConfirmation.vue";
+import Otp from "@/views/Otp.vue";
+
+
+
 
 const routes = [
   {
@@ -87,6 +91,11 @@ const routes = [
     path: "/Logout",
     component: Login,
   },
+  {
+    name: "Otp",
+    path: "/Otp",
+    component: Otp,
+  },
 ];
 
 const router = createRouter({
@@ -145,6 +154,9 @@ router.beforeEach((to, from) => {
     resetLogoutTimer();
   }
 });
+
+
+
 
 setupActivityListeners();
 
