@@ -155,6 +155,9 @@ router.beforeEach((to, from) => {
   }
 });
 
+
+
+
 setupActivityListeners();
 
 export default router;

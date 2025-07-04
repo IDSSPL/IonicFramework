@@ -30,7 +30,7 @@
                     "
                   >
                     <!-- Bhedasgaon Nagari Sahakari Pathsanstha Ltd. -->
-                     Malkapur Urban Co-Op Credit Society Ltd 
+                     Malkapur Urban Co-Op Credit Society Ltd.
                   </p>
                 </ion-card-title>
               </ion-card-header>
@@ -333,6 +333,7 @@ export default {
         localStorage.removeItem("token"); // Clear user token
         localStorage.setItem("token", "");
         localStorage.setItem("userDetails", "");
+        localStorage.setItem("deviceId", "");
         CapacitorApp.exitApp(); // Exit the app
       }
       if (router.currentRoute.value.name === "Logout") {
@@ -340,6 +341,7 @@ export default {
         localStorage.removeItem("token"); // Clear user token
         localStorage.setItem("token", "");
         localStorage.setItem("userDetails", "");
+        localStorage.setItem("deviceId", "");
         CapacitorApp.exitApp(); // Exit the app
       }
     };
@@ -368,7 +370,10 @@ export default {
 
     return {};
   },
+  
 };
+
+
 </script>
 <style scoped>
 .card-container {
