@@ -127,13 +127,13 @@ export default {
         validator.isLength(this.bank_name, { min: 4, max: 30 });
 
       if (!this.validation.ben_account) {
-        return "Pleae enter valid beneficiary account number.";
+        return "Please enter valid beneficiary account number.";
       }
       if (!this.validation.ifsc_code) {
-        return "Pleae enter valid IFSC code.";
+        return "Please enter valid IFSC code.";
       }
       if (!this.validation.bank_name) {
-        return "Pleae enter valid bank name.";
+        return "Please enter valid bank name.";
       }
     },
 
@@ -178,7 +178,7 @@ export default {
         );
 
         if (response?.data?.message == "Success") {
-          this.success("Beneficiary Remove Successfully.");
+          this.success("✅ Beneficiary Remove Successfully.");
           this.$router.push("Home");
         } else {
           this.error("failed. Please try again or contact to admin.");

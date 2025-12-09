@@ -56,7 +56,17 @@ import {
   IonItemDivider,
 } from "@ionic/vue";
 
-const app = createApp(App).use(IonicVue).use(router);
+// const app = createApp(App).use(IonicVue).use(router);
+const app = createApp(App);
+
+app.use(IonicVue);
+app.use(router);
+
+// router.isReady().then(() => {
+//   app.mount("#app");
+// });
+
+
 app.component("ion-buttons", IonButtons);
 app.component("ion-content", IonContent);
 app.component("ion-header", IonHeader);

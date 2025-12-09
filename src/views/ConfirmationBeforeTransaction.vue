@@ -100,10 +100,10 @@ export default {
       this.validation.email = !validator.isEmpty(this.email);
       this.validation.passward = !validator.isEmpty(this.password);
       if (!this.validation.email) {
-        return "Pleae enter valid email";
+        return "Please enter valid email";
       }
       if (!this.validation.passward) {
-        return "Pleae enter valid password";
+        return "Please enter valid password";
       }
     },
     async login() {
@@ -125,13 +125,13 @@ export default {
           // localStorage.setItem("token", this.email);
           // localStorage.setItem("userDetails", JSON.stringify(response.data));
           // this.setUserDetails({email: this.email, data: response.data});
-          this.success("User Confirmation Succeed.");
+          this.success("✅ User Confirmation Succeed.");
           this.loadderOff();
           this.$emit("userConfirmation", { userConfirmation: true });
           // this.$router.push("Home");
         } else {
           this.loadderOff();
-          this.error("Wrong userid or password is entered.");
+          this.error("❌ Wrong userid or password is entered.");
         }
       } catch (error) {
         console.error(error);

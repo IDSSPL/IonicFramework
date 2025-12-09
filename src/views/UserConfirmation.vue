@@ -16,35 +16,37 @@
       <div class="dialog-content" style="overflow-y: auto; max-height: 700px">
         <p>
           I have read and understood the Terms and Conditions applicable to
-          Mobile Banking Application Facility provided by Malkapur Urban
-          Co-Operative Credit Society Ltd., Malkapur. I confirm to the Society
+          Mobile Banking Application Facility provided by MALKAPUR URBAN
+          CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR. I confirm to the Society
           that I am the duly Authorized User of the Account. I will be solely
-          responsible for protecting any password given by Malkapur Urban
-          Co-Operative Credit Society Ltd., Malkapur for the use of the
-          facility. Malkapur Urban Co-Operative Credit Society Ltd., Malkapur
+          responsible for protecting any password given by MALKAPUR URBAN
+          CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR for the use of the
+          facility. MALKAPUR URBAN
+          CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR
           will not be liable for any unauthorized use of any password(s) given
           to me as an Authorized User or for any fraudulent, duplicate or
           erroneous instructions given by use of the password. If I have reason
           to believe that my Mobile Phone Number is / has been allotted to
           another person and / or there has been an unauthorized transaction in
           the Account and / or my Mobile Phone Number is lost, the Authorized
-          User shall immediately inform Malkapur Urban Co-Operative Credit
-          Society Ltd., Malkapur under acknowledgement about the same. Malkapur
-          Urban Co-Operative Credit Society Ltd., Malkapur shall not be
+          User shall immediately inform MALKAPUR URBAN
+          CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR under acknowledgement about the same. MALKAPUR URBAN
+          CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR shall not be
           responsible for any failure to utilize the Facility due to me not
           being within the geographical range within which the Facility is
-          offered, Malkapur Urban Co-Operative Credit Society Ltd., Malkapur
+          offered, MALKAPUR URBAN
+          CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR
           makes no warranty or representation of any kind in relation to the
           system and the network or their function or performance or for any
           loss or damage whenever and howsoever suffered or incurred by me or by
-          any person resulting from or in connection with the Facility. Malkapur
-          Urban Co-Operative Credit Society Ltd., Malkapur shall under no
+          any person resulting from or in connection with the Facility. MALKAPUR URBAN
+          CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR shall under no
           circumstance be held liable if the Facility is not available or there
           is any delay in the carrying out of the instructions for any reasons
           whatsoever including but not limited to natural calamities, legal
           restraints, faults in the telecommunication network or network
-          failure, or any other reason beyond the control of Malkapur Urban
-          Co-Operative Credit Society Ltd., Malkapur.
+          failure, or any other reason beyond the control of MALKAPUR URBAN
+          CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR.
         </p>
         <div class="button-container">
           <ion-button @click="login()" color="danger">Disagree</ion-button>
@@ -83,10 +85,10 @@ export default {
     //   this.validation.email = !validator.isEmpty(this.email);
     //   this.validation.passward = !validator.isEmpty(this.password);
     //   if (!this.validation.email) {
-    //     return "Pleae enter valid email";
+    //     return "Please enter valid email";
     //   }
     //   if (!this.validation.passward) {
-    //     return "Pleae enter valid password";
+    //     return "Please enter valid password";
     //   }
     // },
     async login() {
@@ -139,7 +141,7 @@ export default {
           localStorage.setItem("token", this.userId);
       localStorage.setItem("userDetails", JSON.stringify(response.data));
       this.setUserDetails({ email: this.userId, data: response.data });
-      this.success("Logged in successfully");
+      this.success("✅ Logged in successfully");
       this.$router.push("Home");
         } else {
           this.clearUserData();

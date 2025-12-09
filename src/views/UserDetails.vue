@@ -139,10 +139,10 @@ export default {
       this.validation.email = !validator.isEmpty(this.email);
       this.validation.passward = !validator.isEmpty(this.password);
       if (!this.validation.email) {
-        return "Pleae enter valid email";
+        return "Please enter valid email";
       }
       if (!this.validation.passward) {
-        return "Pleae enter valid password";
+        return "Please enter valid password";
       }
     },
     async fetchUserDetails() {

@@ -171,10 +171,10 @@ export default {
         validator.isLength(this.bene_name, { min: 4, max: 30 });
 
       if (!this.validation.ben_account) {
-        return "Pleae enter valid beneficiary account number.";
+        return "Please enter valid beneficiary account number.";
       }
       if (!this.validation.con_ben_account) {
-        return "Pleae enter valid confirm beneficiary account number.";
+        return "Please enter valid confirm beneficiary account number.";
       }
 
       if (this.ben_account != this.con_ben_account) {
@@ -182,13 +182,13 @@ export default {
         return "beneficiary account number missmatch.";
       }
       if (!this.validation.ifsc_code) {
-        return "Pleae enter valid IFSC code.";
+        return "please enter valid IFSC code.";
       }
       if (!this.validation.bank_name) {
-        return "Pleae enter valid bank name.";
+        return "please enter valid bank name.";
       }
       if (!this.validation.bene_name) {
-        return "Pleae enter valid beneficiary name.";
+        return "please enter valid beneficiary name.";
       }
     },
     async addbene() {
@@ -214,7 +214,7 @@ export default {
         );
 
         if (response?.data?.message == "Success") {
-          this.success("Beneficiary added successfully.");
+          this.success("✅ Beneficiary added successfully.");
           this.$router.push("Home");
         } else {
           this.error("failed. Please try again or contact to admin.");

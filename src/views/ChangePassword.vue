@@ -71,7 +71,7 @@
               </div>
             </ion-input>
             <ion-note
-              >(please use capitals(A,B...),special character(@,#....) and
+              >(Please use capitals(A,B...),special character(@,#....) and
               no(1,2...) for make it strong)</ion-note
             >
           </ion-item>
@@ -125,10 +125,10 @@ export default {
       this.validation.newpassward = passwordRegex.test(this.newpassward);
 
       if (!this.validation.email) {
-        return "Pleae enter valid email";
+        return "Please enter valid email";
       }
       if (!this.validation.passward) {
-        return "Pleae enter valid password";
+        return "Please enter valid password";
       }
       if (!this.validation.newpassward) {
         return "New password must be at least 8 characters and include 1 special character, 1 capital letter, and 4 numbers";
@@ -154,12 +154,12 @@ export default {
         );
 
         if (response?.data?.message == "Success") {
-          this.success("Passward change succeed.");
+          this.success("✅ Passward change succeed.");
           this.clearUserData();
           this.loadderOff();
           this.$router.push("login");
         } else {
-          this.error("New password and old password must be different.");
+          this.error("❌ New password and old password must be different.");
           // this.clearUserData();
           // this.loadderOff();
           // this.$router.push("login");

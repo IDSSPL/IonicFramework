@@ -15,6 +15,9 @@
           <ion-item lines="none">
             <ion-input
               v-model="email"
+              type="tel"
+              maxlength="10"
+              inputmode="numeric"
               labelPlacement="floating"
               value="hi@ionic.io"
               :class="{
@@ -99,46 +102,46 @@
     </ion-footer>
     <!-- Custom confirmation dialog -->
     <!-- <div v-if="!userConfirm"> -->
-    <div v-if="showDialog" class="confirmation-dialog">
+    <!-- <div v-if="showDialog" class="confirmation-dialog">
       <div class="dialog-content" style="overflow-y: auto; max-height: 700px">
         <p>
           I have read and understood the Terms and Conditions applicable to
-          Mobile Banking Application Facility provided by Malkapur Urban
-          Co-Operative Credit Society Ltd., Malkapur. I confirm to the Society
+          Mobile Banking Application Facility provided by MALKAPUR URBAN
+          CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR. I confirm to the Society
           that I am the duly Authorized User of the Account. I will be solely
-          responsible for protecting any password given by Malkapur Urban
-          Co-Operative Credit Society Ltd., Malkapur for the use of the
-          facility. Malkapur Urban Co-Operative Credit Society Ltd., Malkapur
+          responsible for protecting any password given by MALKAPUR URBAN
+          CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR for the use of the
+          facility. MALKAPUR URBAN CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR
           will not be liable for any unauthorized use of any password(s) given
           to me as an Authorized User or for any fraudulent, duplicate or
           erroneous instructions given by use of the password. If I have reason
           to believe that my Mobile Phone Number is / has been allotted to
           another person and / or there has been an unauthorized transaction in
           the Account and / or my Mobile Phone Number is lost, the Authorized
-          User shall immediately inform Malkapur Urban Co-Operative Credit
-          Society Ltd., Malkapur under acknowledgement about the same. Malkapur
-          Urban Co-Operative Credit Society Ltd., Malkapur shall not be
+          User shall immediately inform MALKAPUR URBAN CO-OPERATIVE CREDIT
+          SOCIETY LTD., MALKAPUR under acknowledgement about the same. MALKAPUR
+          URBAN CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR shall not be
           responsible for any failure to utilize the Facility due to me not
           being within the geographical range within which the Facility is
-          offered, Malkapur Urban Co-Operative Credit Society Ltd., Malkapur
+          offered, MALKAPUR URBAN CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR
           makes no warranty or representation of any kind in relation to the
           system and the network or their function or performance or for any
           loss or damage whenever and howsoever suffered or incurred by me or by
-          any person resulting from or in connection with the Facility. Malkapur
-          Urban Co-Operative Credit Society Ltd., Malkapur shall under no
+          any person resulting from or in connection with the Facility. MALKAPUR
+          URBAN CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR shall under no
           circumstance be held liable if the Facility is not available or there
           is any delay in the carrying out of the instructions for any reasons
           whatsoever including but not limited to natural calamities, legal
           restraints, faults in the telecommunication network or network
-          failure, or any other reason beyond the control of Malkapur Urban
-          Co-Operative Credit Society Ltd., Malkapur.
+          failure, or any other reason beyond the control of MALKAPUR URBAN
+          CO-OPERATIVE CREDIT SOCIETY LTD., MALKAPUR.
         </p>
         <div class="button-container">
           <ion-button @click="hideDialog" color="danger">Disagree</ion-button>
           <ion-button @click="login()" color="success">Agree</ion-button>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- </div> -->
   </ion-page>
 </template>
@@ -147,7 +150,8 @@
 import api from "@/api";
 import validator from "validator";
 import { Device } from "@capacitor/device"; // Import the Device plugin
-import { AndroidPermissions } from "@ionic-native/android-permissions";
+//import { AndroidPermissions } from "@ionic-native/android-permissions";
+
 import { v4 as uuidv4 } from "uuid";
 
 import { onMounted, ref } from 'vue';
@@ -201,17 +205,26 @@ export default {
       this.validation.email = !validator.isEmpty(this.email);
       this.validation.passward = !validator.isEmpty(this.password);
       if (!this.validation.email) {
-        return "Pleae enter valid email";
+        return "Please enter valid Mobile Number";
       }
       if (!this.validation.passward) {
-        return "Pleae enter valid password";
+        return "Please enter valid password";
       }
+
+this.validation.email =
+        !validator.isEmpty(this.email) &&
+        validator.isLength(this.email, { min: 10, max: 10 }) &&
+        validator.isAlphanumeric(this.email);
+      if (!this.validation.email) {
+        return "Please enter valid mobile number.";
+      }
+
     },
 
     validateEmail() {
       this.validation.email = !validator.isEmpty(this.email);
       if (!this.validation.email) {
-        return "Pleae enter valid email";
+        return "Please enter valid Mobile Number";
       }
     },
 
@@ -270,7 +283,7 @@ export default {
 
 
      
-       this.success("Logged in successfully");
+      //  this.success("Logged in successfully");
       //  this.$router.push("Home");
     }else if (response?.data?.message == "Success" && response?.data?.status === "02") {
       // this.fetchConfirmation();
@@ -280,17 +293,17 @@ export default {
       //  this.success("Logged in successfully");
        this.$router.push("UserConfirmation");
     }else if (response?.data?.message?.toLowerCase().includes("fail") && response?.data?.status === "08") {
-       await this.showAlert("Device ID: \n" + this.deviceId, "This device is not registered. Please contact your bank.");
+       await this.showAlert("⚠️ Device ID: \n" + this.deviceId, "This device is not registered. Please contact your bank.");
       // this.error("Device ID: " + this.deviceId+"This device is not registered. Please contact your bank.");
     }else if (response?.data?.message?.toLowerCase().includes("fail") && response?.data?.status === "07" ) {
-       await this.showAlert("Password Is Incorrect");
+       await this.showAlert("❌ Password Is Incorrect");
     }else if (response?.data?.message?.toLowerCase().includes("fail") && response?.data?.status === "01" ) {
-       await this.showAlert("This User Is Not Registered");
+       await this.showAlert("⚠️ "+this.email+" This User Is Not Registered.Contact Your Bank.");
     }else if (response?.data?.message?.toLowerCase().includes("fail") && response?.data?.status === "03" ) {
-       await this.showAlert("User Is Deactivated.Please Contact Bank");
+       await this.showAlert("⚠️ User Is Deactivated.Please Contact Bank");
     }else {
       // this.error("Wrong userid or password is entered.");
-      await this.showAlert("Wrong userid or password is entered..");
+      await this.showAlert("❌ Wrong userid or password is entered.");
     }
   } catch (error) {
     await this.showAlert('Error', JSON.stringify(error));
@@ -337,7 +350,7 @@ async showAlert(header, message) {
           localStorage.setItem("token", this.email);
       localStorage.setItem("userDetails", JSON.stringify(response.data));
       this.setUserDetails({ email: this.email, data: response.data });
-      this.success("Logged in successfully");
+      // this.success("Logged in successfully");
       this.$router.push("Home");
         } else {
           // this.$emit("userConfirm", { userConfirm: false });
@@ -369,7 +382,7 @@ async showAlert(header, message) {
         if (response?.data?.message == "Success") {
           // this.$emit("userConfirm", { userConfirm: true });
           // this.clearUserData();
-          this.success("Password Send to your registered E-mail Id.");
+          this.success("✅ Password Send to your registered E-mail Id.");
           this.$router.push("login");
         } else {
           // this.$emit("userConfirm", { userConfirm: false });

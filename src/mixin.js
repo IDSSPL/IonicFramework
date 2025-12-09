@@ -45,6 +45,7 @@ const myMixin = {
     },
     logoutMixin() {
       this.clearUserData();
+      location.reload();
       // alert(this.$router.name);
       this.$router.push("login");
       this.success("Logged out successfully!");

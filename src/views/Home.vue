@@ -25,12 +25,11 @@
                     style="
                       color: yellow;
                       font-weight: bold;
-                      font-size: 15px;
+                      font-size: 12px;
                       margin-top: 0;
                     "
                   >
-                    <!-- Bhedasgaon Nagari Sahakari Pathsanstha Ltd. -->
-                     Malkapur Urban Co-Op Credit Society Ltd
+                    MALKAPUR URBAN CO-OP CREDIT SOCIETY LTD.,MALKAPUR
                   </p>
                 </ion-card-title>
               </ion-card-header>

@@ -1,70 +1,47 @@
 <template>
   <ion-app>
     <ion-split-pane content-id="main-content">
+
+      <!-- SIDE MENU -->
       <ion-menu
-        v-if="$route.name != 'login'"
+        v-if="$route.name !== 'login'"
         content-id="main-content"
         type="overlay"
       >
         <ion-content>
           <ion-list id="inbox-list">
             <ion-list-header>User</ion-list-header>
-            <ion-note>{{
-              userDetailsMixin?.data?.name || userDetailsMixin.email
-            }}</ion-note>
+
+            <ion-note>
+              {{ userDetailsMixin?.data?.name || userDetailsMixin.email }}
+            </ion-note>
 
             <ion-menu-toggle
-              :auto-hide="false"
               v-for="(p, i) in appPages"
               :key="i"
+              :auto-hide="true"
             >
               <ion-item
-                @click="selectedIndex = i"
-                router-direction="root"
                 :router-link="p.url"
-                lines="none"
-                :detail="false"
-                class="hydrated"
+                router-direction="root"
                 :class="{ selected: selectedIndex === i }"
               >
-                <ion-icon
-                  aria-hidden="true"
-                  slot="start"
-                  :ios="p.iosIcon"
-                  :md="p.mdIcon"
-                ></ion-icon>
+                <ion-icon slot="start" :ios="p.iosIcon" :md="p.mdIcon" />
                 <ion-label>{{ p.title }}</ion-label>
               </ion-item>
             </ion-menu-toggle>
-
-            <!-- <ion-menu-toggle :auto-hide="false">
-              <ion-item
-                @click="logoutMixin"
-                router-direction="root"
-                router-link="#"
-                lines="none"
-                :detail="false"
-                class="hydrated"
-              >
-                <ion-icon
-                  color="danger"
-                  aria-hidden="true"
-                  slot="start"
-                  :ios="powerSharp"
-                  :md="powerOutline"
-                ></ion-icon>
-                <ion-label color="danger">Logout</ion-label>
-              </ion-item>
-            </ion-menu-toggle> -->
           </ion-list>
         </ion-content>
       </ion-menu>
-      <ion-router-outlet id="main-content" :key="$route.fullPath"></ion-router-outlet>
 
-      <!-- <ion-router-outlet id="main-content"></ion-router-outlet> -->
+      <!-- MAIN CONTENT -->
+      <ion-router-outlet id="main-content"></ion-router-outlet>
+<!-- :key="$route.fullPath" -->
     </ion-split-pane>
+   
   </ion-app>
 </template>
+
 
 <script setup>
 import {

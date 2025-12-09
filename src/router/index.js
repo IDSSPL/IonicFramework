@@ -1,11 +1,11 @@
-import { createRouter, createWebHistory } from "@ionic/vue-router";
+import { createRouter, createWebHistory } from  "@ionic/vue-router";
 import Login from "@/views/Login.vue";
 import UserDetails from "@/views/UserDetails.vue";
 import SameBankTransfer from "@/views/SameBankTransfer.vue";
 import OtherBankTransfer from "@/views/OtherBankTransfer.vue";
 import Statement from "@/views/Statement.vue";
 import Home from "@/views/Home.vue";
-import AccountsDetails from "@/views/Accountsdetails.vue";
+import AccountsDetails from "@/views/AccountsDetails.vue";
 import ChangePassword from "@/views/ChangePassword.vue";
 import AddBeneficiary from "@/views/AddBeneficiary.vue";
 import QRCollection from "@/views/QRCollection.vue";
@@ -103,6 +103,8 @@ const router = createRouter({
   routes,
 });
 
+
+
 let logoutTimer = null;
 
 const resetLogoutTimer = () => {
@@ -129,8 +131,11 @@ router.beforeEach((to, from) => {
   // explicitly return false to cancel the navigation
   // return false
 
-  console.log(to);
+  console.log("to===",to);
+  
   const userToken = localStorage.getItem("token");
+  console.log("userToken:", userToken);
+
   if (!userToken && to.name != "login") {
     // localStorage.removeItem("token");
     localStorage.setItem("token", "");

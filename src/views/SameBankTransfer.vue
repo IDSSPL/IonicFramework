@@ -144,26 +144,47 @@ export default {
     this.generateUTR();
   },
   methods: {
-    generateUTR() {
-      let random_id = Math.ceil(Math.random() * 100);
-      var currentDate = new Date();
-      const datetime =
-        currentDate.toJSON().slice(0, 10).replace(/-/g, "") +
-        "" +
-        (currentDate.getHours() < 10
-          ? "0" + currentDate.getHours()
-          : currentDate.getHours()) +
-        "" +
-        (currentDate.getMinutes() < 10
-          ? "0" + currentDate.getMinutes()
-          : currentDate.getMinutes()) +
-        "" +
-        (currentDate.getSeconds() < 10
-          ? "0" + currentDate.getSeconds()
-          : currentDate.getSeconds());
+    // generateUTR() {
+    //   let random_id = Math.ceil(Math.random() * 100);
+    //   var currentDate = new Date();
+    //   const datetime =
+    //     currentDate.toJSON().slice(0, 10).replace(/-/g, "") +
+    //     "" +
+    //     (currentDate.getHours() < 10
+    //       ? "0" + currentDate.getHours()
+    //       : currentDate.getHours()) +
+    //     "" +
+    //     (currentDate.getMinutes() < 10
+    //       ? "0" + currentDate.getMinutes()
+    //       : currentDate.getMinutes()) +
+    //     "" +
+    //     (currentDate.getSeconds() < 10
+    //       ? "0" + currentDate.getSeconds()
+    //       : currentDate.getSeconds());
 
-      this.utr = datetime + random_id; // Store the generated UTR number
-    },
+    //   this.utr = datetime + random_id; // Store the generated UTR number
+    // },
+
+generateUTR() {
+  const currentDate = new Date();
+
+  // 1️⃣ Build 14-digit timestamp (YYYYMMDDHHMMSS)
+  const datetime =
+    currentDate.getFullYear().toString() +
+    String(currentDate.getMonth() + 1).padStart(2, '0') +
+    String(currentDate.getDate()).padStart(2, '0') +
+    String(currentDate.getHours()).padStart(2, '0') +
+    String(currentDate.getMinutes()).padStart(2, '0') +
+    String(currentDate.getSeconds()).padStart(2, '0');
+
+  // 2️⃣ Add 2 random digits (00–99)
+  const randomPart = Math.floor(Math.random() * 100)
+    .toString()
+    .padStart(2, '0');
+
+  // 3️⃣ Combine → 16 digits total
+  this.utr = datetime + randomPart;
+},
 
     openUserConfirmationPopup() {
       const errorMessage = this.validateForm();
@@ -184,10 +205,10 @@ export default {
         validator.isLength(this.ben_account, { min: 14, max: 14 }) &&
         validator.isAlphanumeric(this.ben_account);
       if (!this.validation.amount) {
-        return "Pleae enter valid amount to transfer.";
+        return "Please enter valid amount to transfer.";
       }
       if (!this.validation.ben_account) {
-        return "Pleae enter valid beneficiary account number.";
+        return "Please enter valid beneficiary account number.";
       }
     },
 
@@ -301,7 +322,7 @@ export default {
         console.log(response?.data?.message);
         if (response?.data?.message == "Success") {
           // this.success("Transaction succeed.");
-          await this.showAlert("Transaction Succeed.");
+          await this.showAlert("✅ Transaction Succeed.");
           this.openConfirmationModal = false;
           this.loadderOff();
           this.$router.push("Home");
@@ -310,19 +331,19 @@ export default {
           response?.data?.status == "05"
         ) {
           // this.error("Transaction failed. Insuffucient Account Balance.");
-          await this.showAlert("Transaction Failed. Insuffucient Account Balance.");
+          await this.showAlert("❌ Transaction Failed. Insuffucient Account Balance.");
           this.loadderOff();
         } else {
           // this.error(
           //   "Transaction failed. Please try again or Check Account Code."
           // );
-          await this.showAlert("Transaction Failed. Please Try Again or Check Account Code.");
+          await this.showAlert("❌ Transaction Failed. Please Try Again or Check Account Code.");
           // this.clearUserData();
           this.loadderOff();
           // this.$router.push("login");
         }
       } catch (error) {
-        await this.showAlert("Transaction failed. Please Try Again or Contact to Admin.");
+        await this.showAlert("❌ Transaction failed. Please Try Again or Contact to Admin.");
         this.clearUserData();
         this.$router.push("login");
       }

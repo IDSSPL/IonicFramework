@@ -148,7 +148,7 @@
           });
   
           if (response.data.status === '00') {
-            await this.showAlert("Success", "Logged successfully.");
+            await this.showAlert("Success", "✅ Login Successful");
              this.$router.push('Home');
           } else {
            

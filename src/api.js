@@ -1,7 +1,7 @@
 import axios from "axios";
-import { CapacitorHttp } from "@capacitor/core";
- import { Plugins } from "@capacitor/core";
- const { Http } = Plugins;
+// import { CapacitorHttp } from "@capacitor/core";
+//  import { Plugins } from "@capacitor/core";
+//  const { Http } = Plugins;
 
 // import { Http } from '@capacitor-community/http';
 
